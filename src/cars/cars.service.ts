@@ -1,19 +1,20 @@
-import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Car } from './interfaces/cars.interface';
-import { CreateCarDto } from './dto/cars.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Car } from './car.entity';
 
 @Injectable()
 export class CarsService {
-  constructor(@InjectModel('Car') private readonly carModel: Model<Car>) {}
+  constructor(
+    @InjectRepository(Car) private readonly carRepository: Repository<Car>,
+  ) {}
 
-  async create(createCarDto: CreateCarDto): Promise<Car> {
-    const car = new this.carModel(createCarDto);
-    return await car.save();
+  async create(car: Car): Promise<Car> {
+    const carCreated = await this.carRepository.save(car);
+    return carCreated;
   }
 
   async findAll(): Promise<Car[]> {
-    return await this.carModel.find().exec();
+    return await this.carRepository.find();
   }
 }

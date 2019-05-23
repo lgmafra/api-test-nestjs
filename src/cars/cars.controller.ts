@@ -1,15 +1,15 @@
-import { Controller, Body, Post, Get } from '@nestjs/common';
-import { CreateCarDto } from './dto/cars.dto';
+import { Controller, Body, Post, Get, Req } from '@nestjs/common';
+import { Request } from 'express';
 import { CarsService } from './cars.service';
-import { Car } from './interfaces/cars.interface';
+import { Car } from './car.entity';
 
 @Controller('cars')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
   @Post()
-  async create(@Body() createCarDto: CreateCarDto): Promise<Car> {
-    const car = await this.carsService.create(createCarDto);
+  async create(@Req() request: Request) {
+    const car = await this.carsService.create(request.body);
     return car;
   }
 
