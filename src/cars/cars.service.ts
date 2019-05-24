@@ -17,4 +17,8 @@ export class CarsService {
   async findAll(): Promise<Car[]> {
     return await this.carRepository.find();
   }
+
+  async findById(id: string): Promise<Car> {
+    return await this.carRepository.findOne(id);
+  }
 }
